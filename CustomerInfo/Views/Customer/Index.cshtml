@@ -12,20 +12,7 @@
             </div>
         </div>
     </div>
-@*    <div class="row">
-        <div class="col-md-4">
-            <label for="customerName">Customer Name</label>
-            <input type="text" id="customerName" class="form-control" />
-        </div>
-        <div class="col-md-4">
-            <label for="mobile">Mobile</label>
-            <input type="text" id="mobile" class="form-control" />
-        </div>
-        <div class="col-md-4">
-            <label for="address">Address</label>
-            <input type="text" id="address" class="form-control" />
-        </div>
-    </div>*@
+
     <div class="bs-example">
         <div class="container">
             <div class="row">
@@ -35,16 +22,7 @@
         </div>
     </div>
 
-  @*  <div class="bs-example">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 bg-light text-right">
-                    <button type="button" class="btn btn-primary" id="ExportExcel">Export Excel</button>
-                    <button type="button" class="btn btn-warning ml-2" id="search">Search</button>
-                </div>
-            </div>
-        </div>
-    </div>*@
+   
   
     <div id="addCustomerModal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -56,7 +34,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <!-- Form fields for adding a customer -->
+                 
                     <form id="addCustomerForm">
                         <div class="form-group">
                             <label for="customerName">Customer Name</label>
@@ -96,9 +74,64 @@
             </div>
         </div>
     </div>
+ 
+    <div id="updateCustomerModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Customer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+               
+                    <form id="updateCustomerForm">
+                        <div class="form-group">
+                            <label for="customerName">Customer Name</label>
+                            <input type="text" class="form-control" id="ucustomerName" name="ucustomerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="mobile">Mobile</label>
+                            <input type="text" class="form-control" id="umobile" name="umobile" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <input type="text" class="form-control" id="uaddress" name="uaddress" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telephone">Telephone</label>
+                            <input type="text" class="form-control" id="utelephone" name="utelephone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fax">Fax</label>
+                            <input type="text" class="form-control" id="ufax" name="ufax" required>
+                        </div>
+                      
 
-@*<div class="container">
-    <h2>Customer Table</h2>
+                        <input type="hidden"  id="uid" name="uid" >
+                       
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select class="form-control" id="ucategory" name="ucategory" required>
+                                <option value="VIP">VIP</option>
+                                <option value="Regular">Regular</option>
+                                <option value="Eternal">Eternal</option>
+                                <option value="External">External</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close">Close</button>
+                    <button type="button" class="btn btn-primary" id="updateCustomerButton">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="container">
+
+        <h2>Customers Table <input type="text" id="CustomerName" class="form-control" placeholder="Search By Customer Name ..." /></h2>
     <table id="customerTable" class="table table-striped table-bordered" style="width:100%">
         <thead>
             <tr>
@@ -108,77 +141,155 @@
                 <th>Telephone</th>
                 <th>Fax</th>
                 <th>Category</th>
+                <th>Invoices</th>
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>John Doe</td>
-                <td>555-1234</td>
-                <td>123 Main St</td>
-                <td>555-5678</td>
-                <td>555-4321</td>
-                <td>VIP</td>
-                <td>
-                    <button type="button" class="btn btn-info">Edit</button>
-                    <button type="button" class="btn btn-danger">Delete</button>
-                </td>
-            </tr>
-            <tr>
-                <td>Jane Smith</td>
-                <td>555-5678</td>
-                <td>456 Park Ave</td>
-                <td>555-1234</td>
-                <td>555-8765</td>
-                <td>Regular</td>
-                <td>
-                    <button type="button" class="btn btn-info">Edit</button>
-                    <button type="button" class="btn btn-danger">Delete</button>
-                </td>
-            </tr>
-            <!-- Add more rows as needed -->
-        </tbody>
-    </table>
-</div>*@
-</div>
-<script>
-    $(document).ready(function () {
-    // Initialize the modal
-    debugger
-    $('#addCustomerModal').modal({
-    show: false // Hide the modal by default
-    });
 
-    // Handle click event of the "Add Customer" button
+    </table>
+
+</div>
+</div>
+@section Scripts{
+
+
+<script>
+
+    $(document).ready(function () {
+        getdata();
+        debugger
+        function getdata() {
+            debugger
+            var table = $("#customerTable").DataTable({
+                "destroy": true,
+                "serverSide": true,
+                
+               
+                "ajax": {
+                    url: '@Url.Action("GetAll", "Customer")',
+                    type: "get",
+                    data:function(x){
+                            x.CustomerName = $('#CustomerName').val();
+                    }
+                },
+
+                "columns": [
+
+                    {
+                        data: null, name: "CustomerName", render: function (data, type, row) {
+                            return data.customerName ;
+                        }, "orderable": true
+                    },
+                    {
+                        data: null, name: "Mobile", render: function (data, type, row) {
+                            return  data.mobile ;
+
+
+                        }, "orderable": true
+                    },                
+                    {
+                        data: null, name: "Address", render: function (data, type, row) {
+                            return  data.address ;
+
+
+                        }, "orderable": true
+                    },
+                    {
+                        data: null, name: "Telephone", render: function (data, type, row) {
+                            return data.telephone ;
+
+
+                        }, "orderable": true
+                    },
+                    {
+                        data: null, name: "Fax", render: function (data, type, row) {
+                            return  data.fax ;
+
+
+                        }, "orderable": true
+                    },
+                    {
+                        data: null, name: "Category", render: function (data, type, row) {
+                            return  data.category ;
+
+
+                        }, "orderable": true
+                    },
+                        {
+                            data: null, name: "Invoices", render: function (data, type, row) {
+                                return '<a class="add" href="#" data-id="' + data.id + '">Add</a> ' + ' |' +
+                                    '<a class="view" href="#" data-id="' + data.id + '"> View</a>';
+
+
+                            }, "orderable": true
+                        },
+                 
+                    {
+                        data: null, name: "Action", render: function (data, type, row) {
+                                return '<a class="edit" href="#" data-id="' + data.id + '">Edit</a> ' +' |'+
+                                       '<a class="delete" href="#" data-id="' + data.id + '"> Delete</a>';
+
+
+                        }, "orderable": true
+                    }
+                ]
+            });
+
+            
+        }
+     
+            $(document).on("change", "#CustomerName", function () {
+                getdata();
+            });
+  
+    $('#addCustomerModal').modal({
+    show: false 
+    });
+            $('#updateCustomerModal').modal({
+           show: false 
+        });
+    
     $('#addCustomerButton').click(function () {
-    // Show the modal
+   
     $('#addCustomerModal').modal('show');
     });
-
-    // Handle click event of the "Save" button inside the modal
+   
     $('#saveCustomerButton').click(function () {
     // Get the form data and perform necessary actions
     var formData = $('#addCustomerForm').serialize();
-    console.log(formData); // Example: Print the form data to the console
+    console.log(formData);
 
-    // Hide the modal
+  
     $('#addCustomerModal').modal('hide');
     });
+            $('#updateCustomerButton').click(function () {
+            
+
+                $('#updateCustomerModal').modal('hide');
+        });
     $('.close').click(function () {
-    // Show the modal
+   
     $('#addCustomerModal').modal('hide');
     });
     $('#close').click(function () {
-    // Show the modal
-    $('#addCustomerModal').modal('hide');
+   
+            $('#updateCustomerModal').modal('hide');
     });
+        $('.close').click(function () {
+         
+            $('#updateCustomerModal').modal('hide');
+        });
+        $('#close').click(function () {
+          
+            $('#addCustomerModal').modal('hide');
+        });
     });
         $(document).ready(function () {
             $('#saveCustomerButton').click(function() {
                 debugger
                 
 
-                // Get form data
+             
                 var formData = {
                     customerName: $('#customerName').val(),
                     mobile: $('#mobile').val(),
@@ -194,38 +305,122 @@
                     type: 'POST',
                     data: formData,
                     success: function (result) {
-                        // Handle success response
+                      
                         alert('Customer created successfully!');
-
-                        // Clear form fields
+                        location.reload();
+                        
                         $('#addCustomerForm')[0].reset();
+                      
+                    },
+                    error: function (xhr, status, error) {
+                   
+                        alert('Error creating customer: ' + error);
+                    }
+                });
+            });
+            $(document).on('click', '.delete', function () {
+                var id = $(this).data('id');
+                if (confirm('Are you sure you want to delete this record?')) {
+                    var url = '/Customer/delete/' + id;
+                    $.ajax({
+                        url: url,
+                        type: 'Delete',
+                        success: function (result) {
+                            location.reload();
+                        },
+                        error: function (xhr, status, error) {
+                            alert('Error deleted customer: ');
+                        }
+                    });
+                }
+            });
+            $(document).on('click', '.edit', function () {
+               debugger
+
+                var id = $(this).data('id');
+                var url = '/Customer/edit/' + id;
+
+               
+                $('#updateCustomerModal').modal('show');
+
+                // Send AJAX request to retrieve customer data
+                $.ajax({
+                    url: url,
+                    type: 'PUT',
+                    success: function (result) {
+                        // Populate form fields with customer data
+                        $('#ucustomerName').val(result.customerName);
+                        $('#umobile').val(result.mobile);
+                        $('#uaddress').val(result.address);
+                        $('#utelephone').val(result.telephone);
+                        $('#ufax').val(result.fax);
+                        $('#ucategory').val(result.category);
+                        $('#uid').val(result.id);
+                    },
+                    error: function (xhr, status, error) {
+                       
+                    }
+                });
+            });
+
+            $('#updateCustomerButton').click(function () {
+                debugger
+
+                var id = $('#uid').val();
+                
+                var customer = {
+                    customerName: $('#ucustomerName').val(),
+                    mobile: $('#umobile').val(),
+                    address: $('#uaddress').val(),
+                    telephone: $('#utelephone').val(),
+                    fax: $('#ufax').val(),
+                    category: $('#ucategory').val(),
+                    id: $('#uid').val()
+                };
+
+              
+                $.ajax({
+                    url: '/Customer/update',
+                    type: 'POST',
+                    data: customer,
+                    success: function (result) {
+                      
+                        if(result){
+                            location.reload();
+                        
+                        alert('Customer updated successfully!');
+                        }
+
+                        $('#updateCustomerForm')[0].reset();
+
                     },
                     error: function (xhr, status, error) {
                         // Handle error response
-                        alert('Error creating customer: ' + error);
+                        alert('Error updated customer: ');
+                        $('#updateCustomerForm')[0].reset();
                     }
                 });
             });
         });
     $(document).ready(function () {
         $('#exportButton').click(function () {
-            // Perform an AJAX call to the export action method
+            
             $.ajax({
-                url: '@Url.Action("ExportToExcel", "YourController")',
+                url: '@Url.Action("ExportToExcel", "Customer")',
                 type: 'GET',
                 success: function () {
-                    // Handle the success response
+                    
                     alert('Export complete');
                 },
                 error: function () {
-                    // Handle the error response
+               
                     alert('Export failed');
                 }
             });
         });
     });
     </script>
-
+    }
 
 
 

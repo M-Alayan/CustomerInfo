@@ -9,9 +9,9 @@ namespace CustomerInfo.Models
         {
             CreateMap<CustomerModel, Customer>();
             CreateMap<Customer,CustomerModel>();
-            CreateMap<List<Customer>,List<CustomerModel>>();
+           // CreateMap<List<Customer>,List<CustomerModel>>();
             CreateMap<InvoiceModel, Invoices>();
-            CreateMap<List<Invoices>, List<InvoiceModel>>();
+           // CreateMap<List<Invoices>, List<InvoiceModel>>();
         }
     }
 }

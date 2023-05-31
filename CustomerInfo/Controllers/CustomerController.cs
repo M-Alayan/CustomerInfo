@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CustomerInfo.Helper;
 using CustomerInfo.Models;
 using CustomerInfo.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -17,66 +18,68 @@ namespace CustomerInfo.Controllers
             customerService= _customerService;
           
         }
-        // GET: CustomerController
+      
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: CustomerController/Details/5
-        public ActionResult GetAll()
+        [HttpGet]
+        public ActionResult GetAll(DataTableAjaxPostModel model)
         {
-           var listOfCustomer= customerService.liCustomers();
-            return View();
+            int count;
+           var data= customerService.GetAllCustomer(model,out count);
+              return Json(new
+            {
+                draw = model.draw,
+                recordsTotal = count,
+                recordsFiltered = count,
+                data = data
+
+              });
         }
 
-        // GET: CustomerController/Create
         [HttpPost]
      
         public ActionResult Create(CustomerModel model)
         {
 
-            customerService.addCustomers(model);
-            return View();
+        bool response= customerService.addCustomers(model);
+            return Json(response);
         }
 
-     
 
-        // GET: CustomerController/Edit/5
-        public ActionResult Edit(int id)
+
+        [HttpPut]
+        public ActionResult edit(int id)
         {
 
         var customerModel=  customerService.edit(id);
             return Json(customerModel);
         }
 
-        // POST: CustomerController/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(CustomerModel customerModel)
+       
+        public ActionResult update(CustomerModel customerModel)
         {
-            try
-            {
-                customerService.update(customerModel);
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+           
+             var response= customerService.update(customerModel);
+                return Json(response);
+            
+           
         }
 
-     
+        [HttpDelete]
         public ActionResult Delete(int id)
         {
-            customerService.delete(id);
-            return View("Index");
+          var response=  customerService.delete(id);
+            return Json(response);
         }
 
         public ActionResult AddInvoice(InvoiceModel model)
         {
-            customerService.addInvoice(model);
-            return View("Index");
+        var  response=  customerService.addInvoice(model);
+            return Json(response);
         }
         public ActionResult GetAllInvoices(int customerId)
         {
@@ -95,8 +98,8 @@ namespace CustomerInfo.Controllers
             for (int i = 0; i < data.Count; i++)
             {
                 // Assuming YourDataModel has properties you want to export
-               // worksheet.Cells[i + 1, 1].Value = data[i].Property1;
-               // worksheet.Cells[i + 1, 2].Value = data[i].Property2;
+               // worksheet.Cells[i + 1, 1].Value = data[i].;
+               // worksheet.Cells[i + 1, 2].Value = data[i].;
                 // Add more columns as needed
             }
 

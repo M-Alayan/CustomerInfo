@@ -1,17 +1,19 @@
 ﻿using CustomerInfo.Data;
+using CustomerInfo.Helper;
 using CustomerInfo.Models;
 
 namespace CustomerInfo.Service.Interfaces
 {
     public interface ICustomerService
     {
-        void addCustomers(CustomerModel customers);
+        bool addCustomers(CustomerModel customers);
         List<CustomerModel> liCustomers();
-        CustomerModel delete(int id);
+        bool delete(int Id);
         CustomerModel edit(int id);
-        void update(CustomerModel customers);
-        void addInvoice(InvoiceModel invoiceModel);
+        bool update(CustomerModel customers);
+        bool addInvoice(InvoiceModel invoiceModel);
         List<InvoiceModel> GetInvoices(int customerId);
+        List<CustomerModel> GetAllCustomer(DataTableAjaxPostModel model, out int count);
 
     }
 }
